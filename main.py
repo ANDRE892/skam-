@@ -117,7 +117,7 @@ async def verify_human_message(message: Message):
     # Формируем текст с ссылками
     text = "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n"
     for i, link in enumerate(reserve_links, 1):
-        text += f"Резерв {i} – {link.strip()}\n"
+        text += f"Резерв {i} – {link.strip()}\n\n"
     
     try:
         await message.answer(

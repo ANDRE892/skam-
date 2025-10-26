@@ -138,7 +138,17 @@ async def send_mailing_to_all_users(callback: CallbackQuery, state: FSMContext, 
             
         except Exception as e:
             error_count += 1
-            print(f"[MAILING] ❌ [{i}/{len(user_ids)}] Ошибка отправки пользователю {user_id}: {e}")
+            error_msg = str(e)
+            
+            # Определяем тип ошибки для более информативного лога
+            if "bot was blocked by the user" in error_msg:
+                print(f"[MAILING] ❌ [{i}/{len(user_ids)}] Пользователь {user_id} заблокировал бота")
+            elif "bot can't initiate conversation with a user" in error_msg:
+                print(f"[MAILING] ❌ [{i}/{len(user_ids)}] Пользователь {user_id} не инициировал диалог с ботом (никогда не писал /start)")
+            elif "user is deactivated" in error_msg:
+                print(f"[MAILING] ❌ [{i}/{len(user_ids)}] Пользователь {user_id} деактивирован")
+            else:
+                print(f"[MAILING] ❌ [{i}/{len(user_ids)}] Ошибка отправки пользователю {user_id}: {e}")
     
     result_text = (
         f"✅ **РАССЫЛКА ЗАВЕРШЕНА!**\n\n"
