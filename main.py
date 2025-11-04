@@ -14,6 +14,7 @@ TOKEN = os.getenv('TOKEN')
 CHANNEL_LINK = os.getenv("CHANNEL_LINK", "https://t.me/+eXOltHvhsk81NTgy")
 RESERVE_LINKS = os.getenv("RESERVE_LINKS")
 TEXT_MESSAGE = os.getenv("TEXT_MESSAGE", "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n")
+RESERVE_LINK_FORMAT = os.getenv("RESERVE_LINK_FORMAT")
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -117,8 +118,9 @@ async def verify_human_message(message: Message):
     
     # Формируем текст с ссылками
     text = TEXT_MESSAGE
-    for i, link in enumerate(reserve_links, 1):
-        text += f"Резерв {i} – {link.strip()}\n\n"
+    if RESERVE_LINK_FORMAT:
+        for i, link in enumerate(reserve_links, 1):
+            text += RESERVE_LINK_FORMAT.format(i=i, link=link.strip())
     
     try:
         await message.answer(
