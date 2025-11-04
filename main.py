@@ -10,11 +10,19 @@ from database import init_db, save_user, close_db, get_all_users
 from mailing_system import setup_mailing_handlers
 
 load_dotenv()
+
+def decode_env_string(s):
+    """Декодирует escape-последовательности из строки .env"""
+    if s is None:
+        return None
+    # Заменяем \\n на реальные переносы строк
+    return s.replace('\\n', '\n').replace('\\t', '\t')
+
 TOKEN = os.getenv('TOKEN')
 CHANNEL_LINK = os.getenv("CHANNEL_LINK", "https://t.me/+eXOltHvhsk81NTgy")
 RESERVE_LINKS = os.getenv("RESERVE_LINKS")
-TEXT_MESSAGE = os.getenv("TEXT_MESSAGE", "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n")
-RESERVE_LINK_FORMAT = os.getenv("RESERVE_LINK_FORMAT")
+TEXT_MESSAGE = decode_env_string(os.getenv("TEXT_MESSAGE")) or "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n"
+RESERVE_LINK_FORMAT = decode_env_string(os.getenv("RESERVE_LINK_FORMAT"))
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
