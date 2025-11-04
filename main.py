@@ -121,22 +121,13 @@ async def verify_human_message(message: Message):
     user = message.from_user
     print(f"[LOG] Пользователь {user.id} (@{user.username}) нажал 'Я человек'")
     
-    # Разбираем ссылки из одной переменной
-    reserve_links = RESERVE_LINKS.split(',')
-    
-    # Формируем текст с ссылками
-    text = TEXT_MESSAGE
-    if RESERVE_LINK_FORMAT:
-        for i, link in enumerate(reserve_links, 1):
-            text += RESERVE_LINK_FORMAT.format(i=i, link=link.strip())
-    
     try:
         await message.answer(
-            text,
+            TEXT_MESSAGE,
             parse_mode="HTML",
             disable_web_page_preview=True
         )
-        print(f"[LOG] Отправлены ссылки на резервы пользователю {user.id}")
+        print(f"[LOG] Отправлено сообщение пользователю {user.id}")
     except Exception as e:
         if "bot was blocked by the user" in str(e):
             print(f"[WARNING] Пользователь {user.id} заблокировал бота - не удалось отправить сообщение")
