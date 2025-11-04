@@ -13,8 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('TOKEN')
 CHANNEL_LINK = os.getenv("CHANNEL_LINK", "https://t.me/+eXOltHvhsk81NTgy")
 RESERVE_LINKS = os.getenv("RESERVE_LINKS")
-DEFAULT_ADMIN_TEXT = "👋 Привет, {user.first_name}!\n\n🔧 Панель администратора\n\nВыберите действие:"
-ADMIN_TEXT_TEMPLATE = os.getenv("ADMIN_TEXT", DEFAULT_ADMIN_TEXT)
+TEXT_MESSAGE = os.getenv("TEXT_MESSAGE", "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n")
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -39,7 +38,7 @@ async def start_command(message: Message):
     )
     
     if user.id in ADMIN_IDS:
-        admin_text = ADMIN_TEXT_TEMPLATE.replace("{user.first_name}", user.first_name or "")
+        admin_text = f"👋 Привет, {user.first_name}!\n\n🔧 Панель администратора\n\nВыберите действие:"
         admin_keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="💬 Рассылка", callback_data="admin:mailing")],
             [InlineKeyboardButton(text="📊 Статистика", callback_data="admin:stats")]
@@ -117,7 +116,7 @@ async def verify_human_message(message: Message):
     reserve_links = RESERVE_LINKS.split(',')
     
     # Формируем текст с ссылками
-    text = "Для доступа в канал необходимо подписаться на наши резервы 👇\n\n"
+    text = TEXT_MESSAGE
     for i, link in enumerate(reserve_links, 1):
         text += f"Резерв {i} – {link.strip()}\n\n"
     
